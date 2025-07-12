@@ -39,23 +39,23 @@ const lCategoryAddBtn = document.createElement('button');
 let currentUser=null;
 
 navButtons.forEach(btn=> {
-		btn.addEventListener('click', ()=> {
-				navButtons.forEach(b=> b.classList.remove('active'));
-				btn.classList.add('active');
+	btn.addEventListener('click', ()=> {
+		navButtons.forEach(b=> b.classList.remove('active'));
+		btn.classList.add('active');
 
-				Object.values(sections).forEach(s=> s.classList.remove('active'));
-				sections[btn.dataset.sec].classList.add('active');
-			});
+		Object.values(sections).forEach(s=> s.classList.remove('active'));
+		sections[btn.dataset.sec].classList.add('active');
 	});
+});
 
-loginBtn.addEventListener('click', ()=> {
-		supabase.auth.signInWithOAuth({
-
-			provider: 'discord',
-			options: {
-				redirectTo: window.location.origin
-			}
-		});
+loginBtn.addEventListener('click', () => {
+	const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+	const redirectTo = isLocalhost ? window.location.origin : 'https://philipp-dachtler.github.io';
+	
+	supabase.auth.signInWithOAuth({
+		provider: 'discord',
+		options: { redirectTo }
+	});
 });
 
 logoutBtn.addEventListener('click', ()=> supabase.auth.signOut());
