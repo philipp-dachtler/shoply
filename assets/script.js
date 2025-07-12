@@ -61,42 +61,42 @@ loginBtn.addEventListener('click', () => {
 logoutBtn.addEventListener('click', ()=> supabase.auth.signOut());
 
 supabase.auth.onAuthStateChange((_, session)=> {
-		if (session?.user) {
-			currentUser=session.user;
-			showProfile(session.user);
-			loadPersonal();
-			document.querySelector('[data-sec="personal"]').click();
-		}
+	if (session?.user) {
+		currentUser=session.user;
+		showProfile(session.user);
+		loadPersonal();
+		document.querySelector('[data-sec="personal"]').click();
+	}
 
-		else {
-			currentUser=null;
-			hideProfile();
-			sections.profile.classList.add('active');
-			navButtons[2].classList.add('active');
-		}
-	});
+	else {
+		currentUser=null;
+		hideProfile();
+		sections.profile.classList.add('active');
+		navButtons[2].classList.add('active');
+	}
+});
 
 (async ()=> {
-		const {
-			data: {
-				session
-			}
+	const {
+		data: {
+			session
 		}
+	}
 
-		=await supabase.auth.getSession();
+	=await supabase.auth.getSession();
 
-		if (session?.user) {
-			currentUser=session.user;
-			showProfile(session.user);
-			loadPersonal();
-			document.querySelector('[data-sec="personal"]').click();
-		}
+	if (session?.user) {
+		currentUser=session.user;
+		showProfile(session.user);
+		loadPersonal();
+		document.querySelector('[data-sec="personal"]').click();
+	}
 
-		else {
-			sections.profile.classList.add('active');
-			navButtons[2].classList.add('active');
-		}
-	})();
+	else {
+		sections.profile.classList.add('active');
+		navButtons[2].classList.add('active');
+	}
+})();
 
 function showProfile(user) {
 	const discordName=user.user_metadata.full_name || user.user_metadata.user_name || user.email.split('@')[0];
