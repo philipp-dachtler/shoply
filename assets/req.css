@@ -1,0 +1,73 @@
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+.ripple {
+	position: absolute;
+	border-radius: 50%;
+	transform: scale(0);
+	animation: ripple-effect 600ms linear;
+	background-color: rgba(255, 255, 255, 0.7);
+}
+
+.ripple-btn {
+	position: relative;
+    overflow: hidden;
+}
+
+@keyframes ripple-effect {
+	to {
+	  transform: scale(4);
+	  opacity: 0;
+	}
+}
+
+footer {
+	border-top: 1px solid var(--border-glass);
+	color: var(--text-secondary);
+	font-size: 1rem;
+	padding: 20px 0px;
+	text-align: center;
+	width: 100%;
+}
+
+footer p {
+	margin: 4px 0;
+}
+
+footer a {
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.linkout {
+	color: var(--text-secondary) !important;
+	transition: color 0.3s;
+}
+
+.nodecoration {
+	text-decoration: none;
+}
+
+.nodecoration:hover {
+	text-decoration: underline;
+}
+
+footer a:hover {
+	text-decoration: underline;
+}

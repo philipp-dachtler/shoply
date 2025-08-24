@@ -1,0 +1,13 @@
+{
+	"name": "Shoply",
+	"short_name": "Shoply",
+	"start_url": "/",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "/assets/icons/favicon_colored.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		}
+	]
+}

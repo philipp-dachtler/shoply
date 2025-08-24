@@ -1,98 +1,675 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Shoply - V4 Beta 1</title>
+	<title>Shoply: Your All-in-One Shopping List App</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://itsmarian-static.is-a.dev/fonts/font-awesome-6.7.2/css/all.min.css">
-	<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+	<link rel="stylesheet" href="https://itsmarian-static.is-a.dev/fonts/font-awesome-6.7.2/css/all.min.css">
+	<link rel="stylesheet" href="https://itsmarian-static.is-a.dev/global/variables.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon_colored.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/favicon_colored.png">
+	<link rel="stylesheet" href="assets/catcard.css">
+	<link rel="stylesheet" href="assets/cb.css">
+	<link rel="stylesheet" href="assets/popup.css">
 	<link rel="stylesheet" href="assets/styles.css">
-	<meta name="description" content="Shoply - Eine moderne Einkaufsliste-App">
-	<meta name="keywords" content="einkaufsliste, shopping list, shoply">
-	<meta name="author" content="Shoply">
-	<meta name="theme-color" content="#4CAF50">
-	<meta property="og:title" content="Shoply">
-	<meta property="og:description" content="Eine moderne Einkaufsliste-App">
+	<link rel="stylesheet" href="assets/req.css">
+	<meta name="author" content="itsmarian">
+	<meta name="title" content="Shoply: Your All-in-One Shopping List App">
+	<meta name="description" content="Your All-in-One Shopping List App: Organize your shopping lists effortlessly with cloud sync, real-time collaboration, and smart categorization. Never forget an item again!">
+	<meta name="keywords" content="shopping app, shopping list, shoply, shopping app, cloud list, online shopping list">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="index, follow">
+	<meta property="og:title" content="Shoply: Your All-in-One Shopping List App">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://shoply.itsmarian.is-a.dev">
-	<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon.png">
+	<meta property="og:description" content="Your All-in-One Shopping List App: Organize your shopping lists effortlessly with cloud sync, real-time collaboration, and smart categorization. Never forget an item again!">
+    <meta property="og:image" content="https://philipp-dachtler.github.io/assets/icons/favicon_colored.png">
+    <meta property="og:type" content="website">
+	<meta property="og:url" content="https://philipp-dachtler.github.io/?utm_src=og_link">
+	<link rel="icon" type="image/png" sizes="32x32" href="https://philipp-dachtler.github.io/assets/icons/favicon_colored.png">
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCKLQD6DJY"></script>
+	<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-ZCKLQD6DJY');
+	</script>
 </head>
 <body>
-	<div id="app">
-		<section id="section-personal">
-			<h2 class="section-header">Meine Liste</h2>
-			<ul id="personal-list">
-				<div class="empty-state">
-					<p>Noch keine Artikel hinzugefügt</p>
-				</div>
-			</ul>
-			<div class="input-row">
-				<input id="personal-input" placeholder="Neues Produkt..." />
-				<button id="personal-add">Zu Liste hinzufügen</button>
-			</div>
-		</section>
-		<section id="section-local">
-			<h2 class="section-header">Lokale Liste</h2>
-			<ul id="local-list">
-				<div class="empty-state">
-					<p>Noch keine Artikel hinzugefügt</p>
-				</div>
-			</ul>
-			<div class="input-row">
-				<input id="local-input" placeholder="Neues Produkt..." />
-				<button id="local-add">Zu Liste hinzufügen</button>
-			</div>
-            <div class="hr" style="background-color: #ccc; height: 1px; width: 100%;"></div>
-			<div class="actions-row">
-                <h1>Aktionen</h1>
-				<button id="export-btn"></button>
-                    <i class="fas fa-download"></i>
-                    Exportieren</button>
-				<button id="import-btn">
-                    <i class="fas fa-upload"></i>
-                    Importieren
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-shopping-cart"></i>
+                Shoply
+            </h1>
+        </div>
+        <div class="user-info">
+            <button class="btn" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Abmelden</button>
+        </div>
+    </header>
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">
+            <img alt="Shoply Logo" draggable="false" src="assets/icons/favicon_colored.png" width="100%">
+        </div>
+        <div class="loading" id="loadingIndicatorSplash">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div>
+            <section class="login-screen" id="loginScreen">
+                <h2>Anmeldung zur Einkaufsliste</h2>
+                <div class="form-group">
+                    <label for="familyId">Familien-ID eingeben:</label>
+                    <input type="text" id="familyId" placeholder="64-stellige Familien-ID">
+                </div>
+                <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Anmelden</button>
+                <div class="status-message isHidden hidden" id="loginStatus"></div>
+            </section>
+            <div class="card-header">
+                <h2>Willkommen <span id="familyName" style="font-weight: bold;">Ihre Familie</span></h2>
+            </div>
+            <section class="app-screen" id="appScreen">
+                <div class="add-category-form">
+                    <h3>Neue Kategorie erstellen</h3>
+                    <div class="form-group">
+                        <label for="newCategoryName">Kategorie-Name:</label>
+                        <input type="text" id="newCategoryName" placeholder="Name der neuen Kategorie">
+                    </div>
+                    <button class="btn" id="addCategoryBtn"><i class="fas fa-plus"></i> Kategorie hinzufügen</button>
+                </div>
+                <div class="card-header">
+                    <h3>Neues Item hinzufügen</h3>
+                </div>
+                <div class="add-item-form">
+                    <div class="form-group">
+                        <label for="itemName">Item-Name:</label>
+                        <input type="text" id="itemName" placeholder="Was wird benötigt?">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemCategory">Kategorie:</label>
+                        <select id="itemCategory">
+                            <option value="">Bitte wählen...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="itemQuantity">Menge:</label>
+                        <input type="number" id="itemQuantity" placeholder="1" min="1" value="1">
+                    </div>
+                    <button class="btn" id="addItemBtn"><i class="fas fa-plus"></i> Hinzufügen</button>
+                </div>
+                <div class="status-message isHidden hidden" id="appStatus"></div>
+                <div class="card-header">
+                    <h3>Einkaufsliste</h3>
+                </div>
+                <div class="category-list" id="categoryList"><a>No items yet!</a></div>
+                <div class="last-update" id="lastUpdate">
+                    Letzte Aktualisierung: <span id="updateTime">--:--:--</span>
+                </div>
+            </section>
+        </div>
+        <footer id="footer">
+            <span id="connectionStatus" class="connection-status disconnected" title="Verbindungsstatus"></span>
+            <p>
+                Site developed and created by
+                <a class="linkout nodecoration" href="https://github.com/itsmarianmc" target="_blank">itsmarian</a>
+                via
+                <a class="linkout nodecoration" href="https://itsmarian.is-a.dev/" target="_blank">itsmarian.is-a.dev</a>
+            </p>
+            <a class="linkout nodecoration" href="/legal/privacy" target="_blank">Privacy Policy</a>
+            <a>•</a>
+            <a class="linkout nodecoration" href="/legal/terms" target="_blank">Terms of Service</a>
+            <br>
+            <p>
+                <a id="settingsPannelOpener">Change Cookie Preferences</a>
+            </p>
+            <p>&copy; 2025 Shoply Ltd. | All rights reserved!</p>
+        </footer>
+    </div>
+    <div id="install-popup">
+        <div class="container" id="landing-container">
+            <div class="hero">
+                <div class="hero-content">
+                    <div class="logo">Shoply</div>
+                    <h1>Your All-in-One Shopping List App</h1>
+                    <p>Organize your shopping lists effortlessly with cloud sync, real-time collaboration, and smart categorization. Never forget an item again!</p>
+                    <div class="cta-buttons">
+                        <a class="btn btn-primary ripple-btn" id="installPageBtn">
+                            <i class="fas fa-download"></i>
+                            Install Shoply App
+                        </a>
+                        <a href="#features" class="btn btn-secondary ripple-btn">
+                            <i class="fas fa-info-circle"></i>
+                            Learn More
+                        </a>
+                    </div>
+                    <p>
+                        <a id="keepBrowser">or continue in browser</a>
+                    </p>
+                </div>
+            </div>
+            <div class="features" id="features">
+                <h2 class="section-title">Why Choose Shoply?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h3>Cloud Synchronization</h3>
+                        <p>Access your shopping lists from any device. Your data is automatically synced across all your devices in real-time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Real-time Collaboration</h3>
+                        <p>Share lists with family and friends. Edit together in real-time and see changes instantly as they happen.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <h3>Offline Availability</h3>
+                        <p>Create and manage local lists that work without internet. Perfect for when you're on the go or have limited connectivity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3>Smart Categories</h3>
+                        <p>Organize your items with custom categories. Keep your shopping organized and efficient with smart grouping.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Import & Export</h3>
+                        <p>Easily import existing lists or export your data. Full control over your shopping list data with convenient backup options.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <h3>Discord Integration</h3>
+                        <p>Sign in with your Discord account for seamless authentication and easy sharing with your Discord communities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="how-it-works">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Install App</h3>
+                        <p>Download and install the Shoply App on your device. The installation process is quick and easy.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Create Your Account</h3>
+                        <p>Sign up with Discord or use it locally without an account. Choose what works best for you.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Add Your Items</h3>
+                        <p>Create categories and add items to your shopping lists. Organize everything just the way you like it.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Shop & Check Off</h3>
+                        <p>Take your list shopping and check off items as you go. Your progress is saved automatically.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h3>Share & Collaborate</h3>
+                        <p>Share lists with others and collaborate in real-time. Perfect for families and roommates.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-section" style="display: none;">
+                <h2 class="section-title">Experience Shoply</h2>
+                <p>Choose between cloud-synced account lists or local offline lists. Both options give you full control over your shopping experience.</p>
+                <div class="demo-preview">
+                    <div class="demo-nav">
+                        <button class="demo-nav-btn active">
+                            <i class="fas fa-globe"></i>
+                            Account List
+                        </button>
+                        <button class="demo-nav-btn">
+                            <i class="fas fa-laptop"></i>
+                            Local List
+                        </button>
+                        <button class="demo-nav-btn">
+                            <i class="fas fa-user-cog"></i>
+                            Profile
+                        </button>
+                    </div>
+                    <p>✨ Modern glassmorphism design with smooth animations</p>
+                    <p>🔄 Real-time updates and seamless synchronization</p>
+                    <p>📱 Responsive design that works on all devices</p>
+                </div>
+            </div>
+        </div>
+        <div class="container hidden" id="install-container">
+            <div class="return-btn">
+                <div class="btn btn-secondary ripple-btn" id="returnToLanding">
+                    <i class="fas fa-arrow-up"></i>
+                    Return to Landing
+                </div>
+            </div>
+            <div class="header">
+                <div class="logo">Shoply</div>
+                <h1>Install the Shoply app</h1>
+                <p>Get the full Shoply experience with native app features, offline functionality, and quick access from your home screen.</p>
+            </div>
+            <div class="tutorial-section" style="display: flex; flex-direction: column;">
+                <h2>
+                    <i class="fas fa-star"></i>
+                    Benefits of PWA Installation
+                </h2>
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Edit your lists (locally) even when you're of the grid
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Faster loading times
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Native app-like experience
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Push notifications (if enabled)
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        No app store required
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Automatic updates
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Secure HTTPS connection
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Full-screen experience
+                    </li>
+                </ul>
+            </div>
+            <div class="platform-selector">
+                <button class="platform-btn active" data-platform="chrome">
+                    <i class="fab fa-chrome"></i>
+                    Chrome / Edge
                 </button>
-			</div>
-		</section>
-		<section id="section-profile">
-			<div id="user-info" class="hidden">
-				<img id="avatar" src="" alt="Avatar" />
-				<div>
-					<span id="username"></span>
-					<small id="email"></small>
-				</div>
-			</div>
-			<button id="login-btn">Mit Discord anmelden</button>
-			<button id="logout-btn" class="hidden">Abmelden</button>
-		</section>
-	</div>
-    <footer>
-        <p>THIS SITE IS POWERED BY ITSMARIAN VIA ITSMARIAN.IS-A.DEV</p>
-        <a>Privacy Policy</a>
-        <a>•</a>
-        <a>Terms of Service</a>
-        <p>Shoply V4 Beta 1 - TEST PHASE; CONTAINS TEMPORARY ELEMENTS, SCRIPTS, STYLES AND OTHER CONTENT THAT MAY CHANGE AT ANY TIME!!</p>
-        <p>&copy; 2025 Shoply Ltd. | All rights reserved!</p>
-    </footer>
-    <nav class="modern-nav">
-        <div class="active-indicator" style="left: 12.5%; width: 25%;"></div>
-        <button data-sec="personal" class="nav-btn active">
-            <i class="fas fa-globe"></i>
-            <span class="nav-label">Cloud</span>
-        </button>
-        <button data-sec="local" class="nav-btn">
-            <i class="fas fa-computer"></i>
-            <span class="nav-label">Lokal</span>
-        </button>
-        <button data-sec="profile" class="nav-btn">
-            <i class="fas fa-user-cog"></i>
-            <span class="nav-label">Profil</span>
-        </button>
-    </nav>
-	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-	<script src="assets/script.js"></script>
-</body>
+                <button class="platform-btn" data-platform="firefox">
+                    <i class="fab fa-firefox"></i>
+                    Firefox
+                </button>
+                <button class="platform-btn" data-platform="safari">
+                    <i class="fab fa-safari"></i>
+                    iOS (via Safari)
+                </button>
+                <button class="platform-btn" data-platform="android">
+                    <i class="fab fa-android"></i>
+                    Android Chrome
+                </button>
+            </div>
+            <div class="tutorial-section active" id="chrome-tutorial">
+                <h2>
+                    <i class="fab fa-chrome"></i>
+                    Chrome & Edge Installation on Desktop
+                </h2>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3>Open Shoply in Chrome/Edge</h3>
+                    </div>
+                    <p>Navigate to the Shoply web app in your Chrome or Edge browser. Make sure you're on the main app page.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3>Look for the Install Icon</h3>
+                    </div>
+                    <p>In the address bar, you'll see a small install icon (
+                        <i class="fas fa-desktop"></i>
+                        or
+                        <i class="fas fa-square-plus"></i>
+                        ). Click on it.</p>
+                    <div class="warning">
+                        <i class="fas fa-exclamation-triangle warning-icon"></i>
+                        If you don't see the install icon, try refreshing the page or check if your browser supports PWAs.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3>Click "Install"</h3>
+                    </div>
+                    <p>A popup will appear asking if you want to install Shoply. Click "Install" to proceed.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3>Launch the App</h3>
+                    </div>
+                    <p>After installation, Shoply will open in its own window. You can now access it from your desktop or start menu.</p>
+                    <div class="success">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        Congratulations! Shoply is now installed as a PWA on your device.
+                    </div>
+                </div>
+            </div>
+            <div class="tutorial-section" id="firefox-tutorial">
+                <h2>
+                    <i class="fab fa-firefox"></i>
+                    Firefox Installation
+                </h2>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3>Open Shoply in Firefox</h3>
+                    </div>
+                    <p>Navigate to the Shoply web app in Firefox. Make sure you're on the main app page.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3>Access the Menu</h3>
+                    </div>
+                    <p>Click the three-line menu button "
+                        <i class="fas fa-bars"></i>
+                        " in the top right corner of Firefox.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3>Find "Install Site as App"</h3>
+                    </div>
+                    <p>In the menu, look for "Install Site as App" or "Add to Home Screen" option and click it.</p>
+                    <div class="warning">
+                        <i class="fas fa-exclamation-triangle warning-icon"></i>
+                        This feature may not be available in all Firefox versions. Update to the latest version if needed.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3>Complete Installation</h3>
+                    </div>
+                    <p>Follow the prompts to complete the installation. Shoply will then be available as a standalone app.</p>
+                    <div class="success">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        Shoply is now an App on your device!
+                    </div>
+                </div>
+            </div>
+            <div class="tutorial-section" id="safari-tutorial">
+                <h2>
+                    <i class="fab fa-safari"></i>
+                    Safari (iOS) Installation
+                </h2>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3>Open Shoply in Safari</h3>
+                    </div>
+                    <p>Open Safari on your iPhone or iPad and navigate to the Shoply web app.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3>Tap the Share Button</h3>
+                    </div>
+                    <p>Tap the share button "
+                        <i class="fas fa-arrow-up-from-bracket"></i>
+                        " at the bottom of the screen.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3>Select "Add to Home Screen"</h3>
+                    </div>
+                    <p>Scroll down in the share menu and tap "Add to Home Screen".</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3>Customize and Add</h3>
+                    </div>
+                    <p>You can edit the app name if desired, then tap "Add" in the top right corner.</p>
+                    <div class="success">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        Shoply icon will now appear on your home screen like a native app!
+                    </div>
+                </div>
+            </div>
+            <div class="tutorial-section" id="android-tutorial">
+                <h2>
+                    <i class="fab fa-android"></i>
+                    Android Chrome Installation
+                </h2>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3>Open Shoply in Chrome</h3>
+                    </div>
+                    <p>Open Chrome on your Android device and navigate to the Shoply web app.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3>Look for the Install Banner</h3>
+                    </div>
+                    <p>Chrome will automatically show an "Add to Home Screen" banner at the bottom. Tap it.</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3>Alternative: Menu Method</h3>
+                    </div>
+                    <p>If no banner appears, tap the three-dot menu "
+                        <i class="fas fa-ellipsis-vertical"></i>
+                        " in the top right, then select "Add to Home Screen".</p>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3>Confirm Installation</h3>
+                    </div>
+                    <p>Tap "Add" to confirm. Shoply will be installed and added to your home screen.</p>
+                    <div class="success">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        You can now launch Shoply like any other app from your home screen!
+                    </div>
+                </div>
+            </div>
+            <div class="quick-install">
+                <h3>Quick Install Available</h3>
+                <p>Most modern browsers will automatically prompt you to install Shoply when you visit the app. Look for install notifications!</p>
+            </div>
+        </div>
+    </div>
+    <div class="settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h2 class="settings-title">Cookie-Settings</h2>
+            <button class="close-btn ripple-btn" id="close-settings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="settings-content">
+            <div class="cookie-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: rgba(52, 211, 153, 0.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30" fill="#34d399">
+                            <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q97-30 162-118.5T718-480H480v-315l-240 90v207q0 7 2 18h238v316Z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="category-title">Necessary Cookies</h3>
+                    </div>
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked="" disabled="">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="category-description">These cookies are necessary for the basic functions of the website and cannot be disabled. They ensure security functions and enable navigation on the website.</p>
+            </div>
+            <div class="cookie-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: rgba(96, 165, 250, 0.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30" fill="#60a5fa">
+                            <path d="M80-120v-80h800v80H80Zm40-120v-280h120v280H120Zm200 0v-480h120v480H320Zm200 0v-360h120v360H520Zm200 0v-600h120v600H720Z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="category-title">Statistics and Analytics</h3>
+                    </div>
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="analytics-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="category-description">These cookies collect information about how visitors use my website. They help me understand which pages are most popular and how visitors navigate the website. All data collected is anonymized.</p>
+            </div>
+            <div class="cookie-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: rgba(251, 191, 36, 0.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 0 24 24" width="30" fill="#fbbf24">
+                            <path d="m17.5 17.5-2.498.993L17.5 19.5l1 2.5 1-2.5 2.5-1.007-2.5-.993-1-2.514-1 2.514Zm1-15.5-1 2.5-2.498 1.007L17.5 6.5l1 2.514 1-2.514 2.5-.993L19.5 4.5l-1-2.5ZM7.714 9.714 10 4l2.286 5.714L18 12l-5.714 2.286L10 20l-2.286-5.714L2 12Zm.77.77L4.693 12l3.79 1.516L10 17.307l1.516-3.79L15.307 12l-3.79-1.516L10 6.693l-1.516 3.79Z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="category-title">Preferences and Personalization</h3>
+                    </div>
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="preferences-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="category-description">These cookies enable the website to remember choices you have made (such as your username, language, or region) and provide enhanced, more personal features.</p>
+            </div>
+            <div class="cookie-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: rgba(139, 92, 246, 0.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30" fill="#8b5cf6">
+                            <path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="category-title">Third-Party Content</h3>
+                    </div>
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="thirdparty-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="category-description">These cookies are set by third-party services that I use to provide additional features, such as embedded videos, maps, or social media content. Third-party providers may also use these cookies to deliver personalized advertising.</p>
+            </div>
+            <div class="cookie-category cookie-category-bottom">
+                <div class="category-header">
+                    <div class="category-icon" style="background: rgba(236, 72, 153, 0.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30" fill="#ec4899">
+                            <path d="M200-280h560v-80H200v80Zm0-160h560v-80H200v80Zm0-160h400v-80H200v80Zm-40 440q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="category-title">Marketing and Advertising</h3>
+                    </div>
+                    <div class="toggle-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="marketing-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="category-description">These cookies are used to show visitors relevant advertising on other websites. They are also used to limit the frequency of ad display and measure the effectiveness of advertising campaigns.</p>
+            </div>
+        </div>
+        <div class="settings-footer">
+            <button class="btn-save ripple-btn" id="save-settings">
+                <i class="fas fa-save"></i>
+                Save settings
+            </button>
+        </div>
+    </div>
+    <div class="cookie-banner">
+        <div class="cookie-header flex-column">
+            <div class="cookie-header cookie-header-bottom flex-row">
+                <div class="cookie-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="30" viewBox="0 -960 960 960" width="30" fill="#fff">
+                        <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-75 29-147t81-128.5q52-56.5 125-91T475-881q21 0 43 2t45 7q-9 45 6 85t45 66.5q30 26.5 71.5 36.5t85.5-5q-26 59 7.5 113t99.5 56q1 11 1.5 20.5t.5 20.5q0 82-31.5 154.5t-85.5 127q-54 54.5-127 86T480-80Zm-60-480q25 0 42.5-17.5T480-620q0-25-17.5-42.5T420-680q-25 0-42.5 17.5T360-620q0 25 17.5 42.5T420-560Zm-80 200q25 0 42.5-17.5T400-420q0-25-17.5-42.5T340-480q-25 0-42.5 17.5T280-420q0 25 17.5 42.5T340-360Zm260 40q17 0 28.5-11.5T640-360q0-17-11.5-28.5T600-400q-17 0-28.5 11.5T560-360q0 17 11.5 28.5T600-320ZM480-160q122 0 216.5-84T800-458q-50-22-78.5-60T683-603q-77-11-132-66t-68-132q-80-2-140.5 29t-101 79.5Q201-644 180.5-587T160-480q0 133 93.5 226.5T480-160Zm0-324Z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="cookie-title">This site uses cookies</h2>
+                </div>
+            </div>
+            <div>
+                <p class="cookie-description">
+                    <a>This website uses cookies and similar technologies to ensure its basic functionality, enhance your user experience, analyze how it is used, gather anonymized statistics on website traffic and usage patterns, remember your preferences such as language or region, and provide enhanced features and to offer embedded content like videos, maps, or social media feeds.</a>
+                    <br>
+                    <a>By clicking “Accept,” you agree to the use of all cookies. You can change your settings at any time. By using my services, you agree to the</a>
+                    <a class="linkout nodecoration" href="/legal/cookies">Cookie Policy</a><a>, the</a>
+                    <a class="linkout nodecoration" href="/legal/privacy">Privacy Policy</a>
+                    <a>and the</a>
+                    <a class="linkout nodecoration" href="/legal/terms">Terms of Use</a><a>.</a>
+                </p>
+            </div>
+        </div>
+        <div class="cookie-buttons">
+            <button class="cookie-btn btn-primary" id="accept-all">
+                <i class="fas fa-check-circle"></i>
+                Accept all
+            </button>
+            <button class="cookie-btn btn-secondary ripple-btn" id="change-settings">
+                <i class="fas fa-cog"></i>
+                Change settings
+            </button>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/script.js"></script>
+    <script src="assets/popup.js"></script>
+    <script src="assets/cb.js"></script>
+    <script>
+        const isPWA = () => { return window.matchMedia('(display-mode: standalone)').matches ||  window.navigator.standalone || document.referrer.includes('android-app://');};
+        console.log('APP RUNNING AS PWA? \n⤷', isPWA());
 
+        if (!isPWA()) {
+            document.getElementById("install-popup").style.display = "flex";
+            document.getElementById("install-popup").style.visibility = "visible";
+            document.getElementById("install-popup").style.opacity = "1";
+        } else if (isPWA()) {
+            document.getElementById("install-popup").style.display = "none";
+            document.getElementById("install-popup").style.visibility = "hidden";
+            document.getElementById("install-popup").style.opacity = "0";
+        }
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+            .then(reg => console.log('✅ Service Worker registered.', reg))
+            .catch(err => console.error('❌ Service Worker Error:', err));
+        }
+    </script>
+</body>
 </html>
