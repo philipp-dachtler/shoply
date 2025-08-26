@@ -956,9 +956,60 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('resume', function() {
-	showSplashScreen();
+    showSplashScreen();
 });
 
 window.addEventListener('blur', function() {
-	lastHiddenTime = Date.now();
+    lastHiddenTime = Date.now();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    showSplashScreen();
+
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            lastHiddenTime = Date.now();
+        } else {
+            const timeAway = Date.now() - lastHiddenTime;
+            if (timeAway > 1000) {
+                showSplashScreen();
+            }
+        }
+    });
+
+	const userAgent = navigator.userAgent;
+	const isChrome = /Chrome/i.test(userAgent) && !/Edge/i.test(userAgent);
+	const isEdge = /Edge/i.test(userAgent);
+	const isFirefox = /Firefox/i.test(userAgent);
+	const isSafari = /Safari/i.test(userAgent) && !/Chrome/i.test(userAgent);
+	const isAndroid = /Android/i.test(userAgent);
+	const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+
+	if (isAndroid && isChrome) {
+		document.querySelector('[data-platform="android"]').click();
+	} else if (isIOS && isSafari) {
+		document.querySelector('[data-platform="safari"]').click();
+	} else if (isFirefox) {
+		document.querySelector('[data-platform="firefox"]').click();
+	} else if (isChrome || isEdge) {
+		document.querySelector('[data-platform="chrome"]').click();
+	}
+});
+
+platformButtons.forEach(button => {
+	button.addEventListener('click', () => {
+		platformButtons.forEach(btn => btn.classList.remove('active'));
+
+		button.classList.add('active');
+
+		tutorialSections.forEach(section => {
+			section.classList.remove('active');
+		});
+
+		const platform = button.dataset.platform;
+		const targetSection = document.getElementById(`${platform}-tutorial`);
+		if (targetSection) {
+			targetSection.classList.add('active');
+		}
+	});
 });
